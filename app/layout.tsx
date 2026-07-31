@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./editorial.css";
+import "./home.css";
 import { AppFrame } from "@/src/components/AppFrame";
 import { AppProvider } from "@/src/context/AppProvider";
 
@@ -24,8 +26,8 @@ export const metadata: Metadata = {
     locale: "zh_CN",
     images: [
       {
-        url: "/og.png",
-        width: 1744,
+        url: "/og-paper-pause.png",
+        width: 1730,
         height: 909,
         alt: "再等等：给购买决定一点时间",
       },
@@ -36,7 +38,7 @@ export const metadata: Metadata = {
     title: "再等等 · 给购买决定一点时间",
     description:
       "记下想买的东西，等一等，再用真实感受做决定。数据默认只保存在你的浏览器。",
-    images: ["/og.png"],
+    images: ["/og-paper-pause.png"],
   },
 };
 

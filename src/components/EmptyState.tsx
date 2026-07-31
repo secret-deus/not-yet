@@ -20,7 +20,7 @@ export function EmptyState({ filter }: { filter: string }) {
   return (
     <section className="empty-state">
       <span className="empty-icon">
-        <Sprout size={28} aria-hidden="true" />
+        <Sprout size={30} strokeWidth={1.5} aria-hidden="true" />
       </span>
       <h2>{copy.title}</h2>
       <p>{copy.body}</p>

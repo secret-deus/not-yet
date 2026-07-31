@@ -1,208 +1,170 @@
-# Design System Master File
+# 再等等 · Not Yet — Design System
 
-> **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.
-> If that file exists, its rules **override** this Master file.
-> If not, strictly follow the rules below.
+> 视觉方向：**纸上冷静 / Paper Pause**
+> 本文件是全局设计规则。若 `pages/` 中存在页面级规则，则页面规则只覆盖明确列出的部分。
 
----
+## 1. 产品气质
 
-**Project:** 再等等 Not Yet
-**Generated:** 2026-07-31 13:09:11
-**Category:** Productivity Tool
+“再等等”不是电商，也不是说教式节流工具。界面应像一本安静、可信、可以反复翻看的购买决策手册：
 
----
+- 克制，但不寡淡；
+- 有编辑感，而不是通用 SaaS 模板；
+- 有纸张、印刷和手写批注的温度；
+- 强调留白、时间和真实感受；
+- 任何视觉都不能制造消费焦虑或羞耻。
 
-## Global Rules
+## 2. 核心视觉语言
 
-### Color Palette
+| 元素 | 规则 |
+| --- | --- |
+| 页面 | 暖纸色画布，细颗粒纹理，宽松非对称栅格 |
+| 标题 | 中文宋体展示字，较大字号，紧凑行高 |
+| 正文 | 现代中文无衬线字体，16px 起，清晰而轻 |
+| 品牌装置 | 圆形冷静期纸盘、购物袋轮廓、柿子红指针 |
+| 卡片 | 索引卡/纸张，不使用悬浮玻璃或厚重阴影 |
+| 图标 | 统一使用 Lucide 线性图标，1.4–1.8px 描边 |
+| 强调 | 墨绿承担主要操作；柿子红只做指针、标签和重点 |
 
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#0D9488` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary | `#14B8A6` | `--color-secondary` |
-| Accent/CTA | `#EA580C` | `--color-accent` |
-| Background | `#F0FDFA` | `--color-background` |
-| Foreground | `#134E4A` | `--color-foreground` |
-| Muted | `#E8F1F4` | `--color-muted` |
-| Border | `#99F6E4` | `--color-border` |
-| Destructive | `#DC2626` | `--color-destructive` |
-| Ring | `#0D9488` | `--color-ring` |
+## 3. 色彩令牌
 
-**Color Notes:** Teal focus + action orange [Accent adjusted from #F97316 for WCAG 3:1]
+| 角色 | Hex | CSS token |
+| --- | --- | --- |
+| Canvas / 暖纸 | `#F4F0E6` | `--canvas` |
+| Paper / 主纸面 | `#FCF8EE` | `--surface` |
+| Soft paper | `#EDE6D7` | `--surface-soft` |
+| Sage paper | `#E5ECE4` | `--surface-green` |
+| Display ink | `#123A31` | `--ink` |
+| Body ink | `#293D37` | `--text` |
+| Secondary text | `#5F706A` | `--muted` |
+| Quiet text | `#6F7D78` | `--faint` |
+| Hairline | `#D7CDBB` | `--line` |
+| Strong line | `#B7AC99` | `--line-strong` |
+| Primary green | `#153D35` | `--primary` |
+| Primary hover | `#0E3029` | `--primary-hover` |
+| Sage tint | `#DCE7DF` | `--primary-soft` |
+| Persimmon | `#D9643F` | `--terracotta` |
+| Persimmon tint | `#F1DDD0` | `--terracotta-soft` |
+| Danger | `#963F36` | `--danger` |
+| Focus | `#C85434` | `--focus` |
 
-### Typography
+所有正文对画布或纸面的对比度至少达到 WCAG AA 4.5:1。颜色不能独立表达状态，必须同时保留图标或文字。
 
-- **Heading Font:** Inter
-- **Body Font:** Inter
-- **Mood:** flat, clean, system, bold, geometric, cross-platform, icon, poster, minimal, functional, responsive
-- **Google Fonts:** [Inter + Inter](https://fonts.google.com/share?selection.family=Inter:wght@400;600;700;800)
-
-**CSS Import:**
-```css
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-```
-
-### Spacing Variables
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--space-xs` | `4px` / `0.25rem` | Tight gaps |
-| `--space-sm` | `8px` / `0.5rem` | Icon gaps, inline spacing |
-| `--space-md` | `16px` / `1rem` | Standard padding |
-| `--space-lg` | `24px` / `1.5rem` | Section padding |
-| `--space-xl` | `32px` / `2rem` | Large gaps |
-| `--space-2xl` | `48px` / `3rem` | Section margins |
-| `--space-3xl` | `64px` / `4rem` | Hero padding |
-
-### Shadow Depths
-
-| Level | Value | Usage |
-|-------|-------|-------|
-| `--shadow-sm` | `0 1px 2px rgba(0,0,0,0.05)` | Subtle lift |
-| `--shadow-md` | `0 4px 6px rgba(0,0,0,0.1)` | Cards, buttons |
-| `--shadow-lg` | `0 10px 15px rgba(0,0,0,0.1)` | Modals, dropdowns |
-| `--shadow-xl` | `0 20px 25px rgba(0,0,0,0.15)` | Hero images, featured cards |
-
----
-
-## Component Specs
-
-### Buttons
+## 4. 字体
 
 ```css
-/* Primary Button */
-.btn-primary {
-  background: #EA580C;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
+--font-display:
+  "Songti SC", "STSong", "Noto Serif CJK SC",
+  "Source Han Serif SC", "SimSun", serif;
 
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* Secondary Button */
-.btn-secondary {
-  background: transparent;
-  color: #0D9488;
-  border: 2px solid #0D9488;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
+--font-sans:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+  "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
 ```
 
-### Cards
+- Hero：`clamp(3.25rem, 7vw, 6.75rem)`，行高 0.98–1.05。
+- 页面标题：`clamp(2.25rem, 5vw, 4rem)`。
+- 区块标题：24–34px。
+- 正文：16–18px，行高 1.65–1.8。
+- 标签与元数据：12–13px，不低于 12px。
+- 价格、时间、计数使用 tabular numerals。
 
-```css
-.card {
-  background: #F0FDFA;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: all 200ms ease;
-  cursor: pointer;
-}
+不依赖远程字体，优先使用系统中文字体，避免 FOIT 和隐私额外请求。
 
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-```
+## 5. 布局
 
-### Inputs
+- 桌面最大外壳：1280px。
+- 内容页阅读宽度：760px。
+- 首页：12 栏或两列非对称栅格，Hero 文案约 46%，视觉装置约 54%。
+- 栅格间距：8 / 12 / 16 / 24 / 32 / 48 / 72 / 96。
+- 桌面首屏保持大量负空间；移动端优先展示标题、CTA、倒计时。
+- 断点：375 / 768 / 1024 / 1440。
+- 禁止横向滚动；固定元素必须考虑 `safe-area-inset-bottom`。
 
-```css
-.input {
-  padding: 12px 16px;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 200ms ease;
-}
+## 6. 组件
 
-.input:focus {
-  border-color: #0D9488;
-  outline: none;
-  box-shadow: 0 0 0 3px #0D948820;
-}
-```
+### Button
 
-### Modals
+- 主按钮为深墨绿实底，纸白文字，圆角 8–10px。
+- 高度至少 48px；小按钮的触控区域也必须达到 44px。
+- Hover：颜色加深、向上 1px；Pressed：`scale(.985)`。
+- Focus：3px 柿子红混白轮廓，不移除系统可见焦点。
 
-```css
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
+### Record card
 
-.modal {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
-  max-width: 500px;
-  width: 90%;
-}
-```
+- 像一张纸质索引卡，1px 发丝边框，6–10px 小圆角。
+- 卡片内部包含：状态、标题、线稿图标、价格、剩余时间/决定结果。
+- Hover：阴影轻微加深、上移 3px、箭头平移 3px。
+- 不使用整片彩色背景表达状态；状态文字必须保留。
 
----
+### Form
 
-## Style Guidelines
+- 标签始终可见；placeholder 仅作示例。
+- 输入框使用纸白底、1px 边框、8px 圆角。
+- Focus 由墨绿边框和柔和 focus ring 共同表达。
+- 高级字段继续使用渐进披露。
+- 错误就近显示并使用 `role="alert"`。
 
-**Style:** Flat Design
+### Tabs / choices
 
-**Keywords:** 2D, minimalist, bold colors, no shadows, clean lines, simple shapes, typography-focused, modern, icon-heavy
+- Tabs 采用编辑索引式文字导航和底部墨绿指示线。
+- 必须支持方向键、Home、End 和 roving tabIndex。
+- Radiogroup 保留文字、图标、`aria-checked` 与键盘方向键。
 
-**Best For:** Web apps, mobile apps, cross-platform, startup MVPs, user-friendly, SaaS, dashboards, corporate
+### Dialog / toast
 
-**Key Effects:** No gradients/shadows, simple hover (color/opacity shift), fast loading, clean transitions (150-200ms ease), minimal icons
+- Dialog 像居中的纸张面板；backdrop 只用于隔离前景，不作装饰。
+- 打开：180–220ms 淡入和轻微上移。
+- Toast：右下/移动端底部进入，保留撤销按钮和倒计时文本。
 
-### Page Pattern
+## 7. 动效
 
-**Pattern Name:** Minimal Single Column
+| 场景 | 时长 | 方式 |
+| --- | --- | --- |
+| Hover / pressed | 140–180ms | transform + color |
+| Tab / 状态切换 | 160–220ms | opacity + underline |
+| Card 进入 | 220–320ms | opacity + translateY |
+| Dialog | 180–220ms | opacity + translateY + scale |
+| 倒计时装置 | 6–8s | 极轻微漂浮，仅装饰 |
 
-- **Conversion Strategy:** Single CTA focus. Large typography. Lots of whitespace. No nav clutter. Mobile-first.
-- **CTA Placement:** Center, large CTA button
-- **Section Order:** 1. Hero headline, 2. Short description, 3. Benefit bullets (3 max), 4. CTA, 5. Footer
+- 动画不得阻塞点击。
+- 不动画 width/height 造成布局抖动；进度条例外，控制在 220ms。
+- `prefers-reduced-motion: reduce` 时关闭所有非必要动画和 smooth scroll。
 
----
+## 8. 页面原则
 
-## Anti-Patterns (Do NOT Use)
+### 首页
 
-- ❌ Complex onboarding
-- ❌ Slow performance
+- 大标题：“想买的，先放一放。”
+- 唯一主 CTA：“记下想买的东西”。
+- 冷静期纸盘必须成为首屏记忆点，并优先显示真实记录的剩余时间。
+- 状态筛选置于记录区上沿。
+- 商品卡片使用真实数据，空状态仍需保留呼吸感。
 
-### Additional Forbidden Patterns
+### 详情、复盘和表单
 
-- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
-- ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer
-- ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout
-- ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
-- ❌ **Instant state changes** — Always use transitions (150-300ms)
-- ❌ **Invisible focus states** — Focus states must be visible for a11y
+- 复用同一纸张、墨绿和柿子红系统。
+- 内容页保持 760px 内的舒适阅读宽度。
+- 每屏只有一个主操作。
+- 删除与危险操作必须与正常操作分区。
 
----
+## 9. 禁止模式
 
-## Pre-Delivery Checklist
+- 通用仪表盘、侧边栏和密集统计图；
+- 玻璃拟态、霓虹、紫蓝渐变；
+- 大量白色圆角卡片平铺；
+- 厚重 3D、黏土图标和夸张阴影；
+- emoji 充当结构图标；
+- 随机英文小字、不可读的装饰微文案；
+- Hover 导致布局跳动；
+- 低对比灰字、不可见焦点、低于 44px 的触控目标。
 
-Before delivering any UI code, verify:
+## 10. 发布前检查
 
-- [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent icon set (Heroicons/Lucide)
-- [ ] `cursor-pointer` on all clickable elements
-- [ ] Hover states with smooth transitions (150-300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
-- [ ] Focus states visible for keyboard navigation
-- [ ] `prefers-reduced-motion` respected
-- [ ] Responsive: 375px, 768px, 1024px, 1440px
-- [ ] No content hidden behind fixed navbars
-- [ ] No horizontal scroll on mobile
+- [ ] 375 / 768 / 1024 / 1440 无横向滚动
+- [ ] 所有触控目标至少 44×44px
+- [ ] 正文对比度至少 4.5:1
+- [ ] 键盘可完成筛选、表单、决定和弹窗操作
+- [ ] `prefers-reduced-motion` 生效
+- [ ] 状态不只依赖颜色
+- [ ] 固定 CTA、sticky action 与撤销 toast 不重叠
+- [ ] 页面使用真实产品文案与真实业务数据

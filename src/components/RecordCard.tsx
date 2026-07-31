@@ -3,9 +3,13 @@
 import Link from "next/link";
 import {
   ArrowUpRight,
+  Camera,
   CheckCircle2,
   CirclePause,
   Clock3,
+  Headphones,
+  Keyboard,
+  Monitor,
   ShoppingBag,
 } from "lucide-react";
 import { formatMoney } from "@/src/domain/money";
@@ -60,13 +64,18 @@ function statusView(record: PurchaseRecord, nowMs: number) {
 export function RecordCard({
   record,
   nowMs,
+  featured = false,
 }: {
   record: PurchaseRecord;
   nowMs: number;
+  featured?: boolean;
 }) {
   const status = statusView(record, nowMs);
   return (
-    <Link className="record-card" href={`/items/${record.id}`}>
+    <Link
+      className={`record-card${featured ? " record-card-featured" : ""}`}
+      href={`/items/${record.id}`}
+    >
       <div className="record-card-topline">
         <span className={`status-pill ${status.className}`}>
           {status.icon}
@@ -79,12 +88,39 @@ export function RecordCard({
           <h2>{record.title}</h2>
           <p>{record.reason || "还没有写购买理由"}</p>
         </div>
-        <ArrowUpRight size={20} aria-hidden="true" />
+        <ProductSketch title={record.title} />
       </div>
       <div className="record-card-foot">
-        <span>{status.detail}</span>
+        <span className="record-card-detail">{status.detail}</span>
         <span>第 {record.coolingRound} 轮</span>
+        <span className="record-card-arrow" aria-hidden="true">
+          <ArrowUpRight size={18} />
+        </span>
       </div>
     </Link>
   );
+}
+
+function ProductSketch({ title }: { title: string }) {
+  const normalized = title.toLowerCase();
+  const Icon = normalized.match(/耳机|音响|headphone|airpods/)
+    ? Headphones
+    : normalized.match(/键盘|keycap|keyboard/)
+      ? Keyboard
+      : normalized.match(/相机|摄影|镜头|camera/)
+        ? Camera
+        : normalized.match(/电脑|显示器|屏幕|monitor/)
+          ? Monitor
+          : ShoppingBag;
+
+  return (
+    <span className="record-card-visual" aria-hidden="true">
+      <Icon size={featuredIconSize(title)} strokeWidth={1.15} />
+      <i />
+    </span>
+  );
+}
+
+function featuredIconSize(title: string): number {
+  return title.length > 12 ? 76 : 88;
 }

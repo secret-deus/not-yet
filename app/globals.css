@@ -1643,10 +1643,6 @@ dd {
   font-weight: 720;
 }
 
-.mobile-fab {
-  display: none;
-}
-
 @media (max-width: 680px) {
   .app-shell {
     padding-bottom: calc(92px + env(safe-area-inset-bottom));
@@ -1799,27 +1795,6 @@ dd {
     min-width: 0;
   }
 
-  .mobile-fab {
-    position: fixed;
-    z-index: 20;
-    right: 16px;
-    bottom: calc(18px + env(safe-area-inset-bottom));
-    display: inline-flex;
-    align-items: center;
-    min-height: 48px;
-    padding: 11px 17px;
-    gap: 7px;
-    border-radius: 999px;
-    background: var(--primary);
-    color: white;
-    font-size: 14px;
-    font-weight: 740;
-    box-shadow: 0 8px 22px rgba(24, 54, 47, 0.2);
-  }
-
-  .home-page:has(.undo-toast) .mobile-fab {
-    display: none;
-  }
 }
 
 @media (max-width: 390px) {

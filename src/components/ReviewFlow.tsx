@@ -5,13 +5,14 @@ import {
   PauseCircle,
   ShoppingBag,
 } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type KeyboardEvent } from "react";
 import { useApp } from "@/src/context/AppProvider";
 import { formatMoney } from "@/src/domain/money";
 import { localDateTimeInputValue } from "@/src/domain/time";
 import type { PurchaseRecord } from "@/src/domain/types";
 
 type Choice = "wait" | "skip" | "purchase" | null;
+const choiceOrder = ["wait", "skip", "purchase"] as const;
 
 export function ReviewFlow({ record }: { record: PurchaseRecord }) {
   const { continueWaiting, skipItem, purchaseItem } = useApp();
@@ -59,6 +60,36 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
     }
   };
 
+  const choose = (next: Exclude<Choice, null>) => {
+    setChoice(next);
+    setError(null);
+  };
+
+  const handleChoiceKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    current: Exclude<Choice, null>,
+  ) => {
+    const currentIndex = choiceOrder.indexOf(current);
+    let nextIndex = currentIndex;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      nextIndex = (currentIndex + 1) % choiceOrder.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      nextIndex = (currentIndex - 1 + choiceOrder.length) % choiceOrder.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = choiceOrder.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    const next = choiceOrder[nextIndex];
+    choose(next);
+    window.requestAnimationFrame(() => {
+      document.getElementById(`decision-${next}`)?.focus();
+    });
+  };
+
   return (
     <div className="review-flow">
       <section className="review-context">
@@ -88,27 +119,40 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
         <h2 id="decision-title">等了一段时间，现在更接近哪一个决定？</h2>
         <p>没有“正确答案”。选择此刻最真实的一项就好。</p>
 
-        <div className="decision-options" role="radiogroup">
+        <div
+          className="decision-options"
+          role="radiogroup"
+          aria-labelledby="decision-title"
+        >
           <DecisionOption
             active={choice === "wait"}
+            choice="wait"
             icon={<Clock3 size={22} />}
             title="我想再等一等"
             description="再给自己一轮冷静期"
-            onClick={() => setChoice("wait")}
+            onClick={() => choose("wait")}
+            onKeyDown={handleChoiceKeyDown}
+            tabIndex={choice === null || choice === "wait" ? 0 : -1}
           />
           <DecisionOption
             active={choice === "skip"}
+            choice="skip"
             icon={<PauseCircle size={22} />}
             title="我先不买"
             description="把这次决定记录下来"
-            onClick={() => setChoice("skip")}
+            onClick={() => choose("skip")}
+            onKeyDown={handleChoiceKeyDown}
+            tabIndex={choice === "skip" ? 0 : -1}
           />
           <DecisionOption
             active={choice === "purchase"}
+            choice="purchase"
             icon={<ShoppingBag size={22} />}
             title="我已经买了"
             description="一周后回来验证使用感受"
-            onClick={() => setChoice("purchase")}
+            onClick={() => choose("purchase")}
+            onKeyDown={handleChoiceKeyDown}
+            tabIndex={choice === "purchase" ? 0 : -1}
           />
         </div>
       </section>
@@ -223,24 +267,36 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
 
 function DecisionOption({
   active,
+  choice,
   icon,
   title,
   description,
   onClick,
+  onKeyDown,
+  tabIndex,
 }: {
   active: boolean;
+  choice: Exclude<Choice, null>;
   icon: React.ReactNode;
   title: string;
   description: string;
   onClick(): void;
+  onKeyDown(
+    event: KeyboardEvent<HTMLButtonElement>,
+    choice: Exclude<Choice, null>,
+  ): void;
+  tabIndex: number;
 }) {
   return (
     <button
       className={active ? "is-active" : ""}
+      id={`decision-${choice}`}
       type="button"
       role="radio"
       aria-checked={active}
       onClick={onClick}
+      onKeyDown={(event) => onKeyDown(event, choice)}
+      tabIndex={tabIndex}
     >
       <span aria-hidden="true">{icon}</span>
       <div>

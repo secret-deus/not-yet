@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clock3, DatabaseBackup, X } from "lucide-react";
+import { CirclePause, LockKeyhole, X } from "lucide-react";
 import {
   useEffect,
   useRef,
@@ -35,7 +35,7 @@ export function AppFrame({ children }: { children: ReactNode }) {
       <header className="site-header">
         <Link className="brand" href="/" aria-label="再等等，返回首页">
           <span className="brand-mark" aria-hidden="true">
-            <Clock3 size={19} strokeWidth={2.2} />
+            <CirclePause size={23} strokeWidth={1.7} />
           </span>
           <span>
             <strong>再等等</strong>
@@ -43,7 +43,7 @@ export function AppFrame({ children }: { children: ReactNode }) {
           </span>
         </Link>
         <span className="local-badge">
-          <DatabaseBackup size={15} aria-hidden="true" />
+          <LockKeyhole size={15} aria-hidden="true" />
           数据只存在本机
         </span>
       </header>
