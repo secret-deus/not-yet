@@ -2,6 +2,7 @@
 
 import { Brain, ClipboardList, RefreshCw, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@/src/components/ui/button";
 import {
   buildReflectRequest,
   inputHash,
@@ -109,8 +110,7 @@ export function AdvisorPanel({ record }: { record: PurchaseRecord }) {
       </div>
 
       <div className="advisor-actions">
-        <button
-          className="button button-primary"
+        <Button
           type="button"
           disabled={loading}
           onClick={() => setConsentOpen(true)}
@@ -121,16 +121,16 @@ export function AdvisorPanel({ record }: { record: PurchaseRecord }) {
             <Sparkles size={18} aria-hidden="true" />
           )}
           {loading ? "正在换个角度…" : "请 AI 帮我反思"}
-        </button>
-        <button
-          className="button button-secondary"
+        </Button>
+        <Button
+          variant="outline"
           type="button"
           disabled={loading}
           onClick={addLocal}
         >
           <ClipboardList size={18} aria-hidden="true" />
           使用本地清单
-        </button>
+        </Button>
       </div>
 
       {loading ? (

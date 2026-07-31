@@ -83,6 +83,8 @@ AI 接口使用服务端白名单校验、严格 JSON Schema 结构化输出、1
 - vinext / Vite 8
 - Next App Router 兼容路由
 - Cloudflare Workers 运行时
+- shadcn/ui + Radix UI 交互组件
+- Tailwind CSS 4 设计 Token 与响应式样式
 - Zod 运行时 Schema 校验
 - LocalStorage 主副本 Repository
 - Node Test Runner + tsx
@@ -97,6 +99,7 @@ src/storage/         LocalStorage Repository
 src/context/         应用状态、持久化提交和业务动作绑定
 src/advisor/         AI 输入白名单与输出契约
 src/components/      表单、列表、详情、复盘和 AI 交互组件
+src/components/ui/   shadcn/ui 基础控件（按项目视觉定制）
 tests/               领域、存储与构建产物测试
 docs/PRD.md          已确认的产品需求
 ```

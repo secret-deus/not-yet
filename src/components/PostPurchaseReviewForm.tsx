@@ -2,6 +2,15 @@
 
 import { Save } from "lucide-react";
 import { useState, type FormEvent } from "react";
+import { Button } from "@/src/components/ui/button";
+import { Checkbox } from "@/src/components/ui/checkbox";
+import { Input } from "@/src/components/ui/input";
+import { Label } from "@/src/components/ui/label";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/src/components/ui/radio-group";
+import { Textarea } from "@/src/components/ui/textarea";
 import { useApp } from "@/src/context/AppProvider";
 import { formatMoney } from "@/src/domain/money";
 import type {
@@ -35,9 +44,18 @@ export function PostPurchaseReviewForm({
       setError("请填写使用次数、需要是否满足和满意度。");
       return;
     }
+    const parsedUseCount = Number(actualUseCount);
+    if (
+      !Number.isInteger(parsedUseCount) ||
+      parsedUseCount < 0 ||
+      parsedUseCount > 99
+    ) {
+      setError("使用次数请填写 0～99 的整数。");
+      return;
+    }
     try {
       const ok = completeReview(record.id, {
-        actualUseCount: Number(actualUseCount),
+        actualUseCount: parsedUseCount,
         needOutcome,
         satisfaction,
         hadUnexpectedCost,
@@ -86,10 +104,10 @@ export function PostPurchaseReviewForm({
 
       <section className="form-section">
         <div className="field">
-          <label htmlFor="actual-use-count">
+          <Label htmlFor="actual-use-count">
             最近 7 天实际用了几次 <span aria-hidden="true">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             id="actual-use-count"
             type="number"
             inputMode="numeric"
@@ -107,46 +125,50 @@ export function PostPurchaseReviewForm({
           <legend>
             当时的需要，现在满足了吗 <span aria-hidden="true">*</span>
           </legend>
-          <div className="segmented-options">
+          <RadioGroup
+            className="segmented-options"
+            name="need-outcome"
+            value={needOutcome}
+            onValueChange={(value) => setNeedOutcome(value as NeedOutcome)}
+          >
             {[
               ["met", "符合"],
               ["partly_met", "部分符合"],
               ["not_met", "不太符合"],
             ].map(([value, label]) => (
-              <label key={value}>
-                <input
-                  type="radio"
-                  name="need-outcome"
+              <div className="segmented-option" key={value}>
+                <RadioGroupItem
+                  id={`need-outcome-${value}`}
                   value={value}
-                  checked={needOutcome === value}
-                  onChange={() => setNeedOutcome(value as NeedOutcome)}
                 />
-                <span>{label}</span>
-              </label>
+                <Label htmlFor={`need-outcome-${value}`}>{label}</Label>
+              </div>
             ))}
-          </div>
+          </RadioGroup>
         </fieldset>
 
         <fieldset className="choice-fieldset">
           <legend>
             现在的满意度 <span aria-hidden="true">*</span>
           </legend>
-          <div className="rating-options">
+          <RadioGroup
+            className="rating-options"
+            name="satisfaction"
+            value={satisfaction ? String(satisfaction) : ""}
+            onValueChange={(value) =>
+              setSatisfaction(Number(value) as 1 | 2 | 3 | 4 | 5)
+            }
+          >
             {[1, 2, 3, 4, 5].map((value) => (
-              <label key={value}>
-                <input
-                  type="radio"
-                  name="satisfaction"
-                  value={value}
-                  checked={satisfaction === value}
-                  onChange={() =>
-                    setSatisfaction(value as 1 | 2 | 3 | 4 | 5)
-                  }
+              <div className="rating-option" key={value}>
+                <RadioGroupItem
+                  id={`satisfaction-${value}`}
+                  value={String(value)}
                 />
-                <span>{value}</span>
-              </label>
+                <Label htmlFor={`satisfaction-${value}`}>{value}</Label>
+              </div>
             ))}
-          </div>
+          </RadioGroup>
           <div className="rating-labels">
             <span>不太满意</span>
             <span>很满意</span>
@@ -154,25 +176,27 @@ export function PostPurchaseReviewForm({
         </fieldset>
 
         <div className="field checkbox-field">
-          <label>
-            <input
-              type="checkbox"
+          <div className="checkbox-option">
+            <Checkbox
+              id="had-unexpected-cost"
               checked={hadUnexpectedCost}
-              onChange={(event) => setHadUnexpectedCost(event.target.checked)}
+              onCheckedChange={(checked) => setHadUnexpectedCost(checked === true)}
             />
+            <Label htmlFor="had-unexpected-cost">
             <span>
               <strong>还有预料之外的成本</strong>
               <small>例如配件、维修、订阅或额外时间</small>
             </span>
-          </label>
+            </Label>
+          </div>
         </div>
 
         {hadUnexpectedCost ? (
           <div className="field">
-            <label htmlFor="unexpected-cost">额外成本金额（可选）</label>
+            <Label htmlFor="unexpected-cost">额外成本金额（可选）</Label>
             <div className="input-prefix">
               <span>¥</span>
-              <input
+              <Input
                 id="unexpected-cost"
                 inputMode="decimal"
                 value={unexpectedCost}
@@ -184,8 +208,8 @@ export function PostPurchaseReviewForm({
         ) : null}
 
         <div className="field">
-          <label htmlFor="review-note">还有什么想记下来</label>
-          <textarea
+          <Label htmlFor="review-note">还有什么想记下来</Label>
+          <Textarea
             id="review-note"
             rows={4}
             maxLength={280}
@@ -204,17 +228,17 @@ export function PostPurchaseReviewForm({
       ) : null}
 
       <div className="form-actions sticky-actions">
-        <button
-          className="button button-ghost"
+        <Button
+          variant="ghost"
           type="button"
           onClick={() => window.location.assign(`/items/${record.id}`)}
         >
           暂不填写
-        </button>
-        <button className="button button-primary" type="submit">
+        </Button>
+        <Button type="submit">
           <Save size={18} aria-hidden="true" />
           保存使用感受
-        </button>
+        </Button>
       </div>
     </form>
   );

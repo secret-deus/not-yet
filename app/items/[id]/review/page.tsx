@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Button } from "@/src/components/ui/button";
 import { NotFoundState } from "@/src/components/NotFoundState";
 import { PageHeader } from "@/src/components/PageHeader";
 import { ReviewFlow } from "@/src/components/ReviewFlow";
@@ -22,9 +23,9 @@ export default function ReviewPage() {
             ? "冷静期仍在继续；如果你想提前复盘，请先从详情页开始。"
             : "它已经有最终决定，可以在详情页查看。"}
         </p>
-        <Link className="button button-primary" href={`/items/${id}`}>
-          返回详情
-        </Link>
+        <Button asChild>
+          <Link href={`/items/${id}`}>返回详情</Link>
+        </Button>
       </section>
     );
   }

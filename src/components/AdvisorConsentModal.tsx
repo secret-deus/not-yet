@@ -1,6 +1,7 @@
 "use client";
 
 import { Brain, LockKeyhole, Send } from "lucide-react";
+import { Button } from "@/src/components/ui/button";
 import { Modal } from "./Modal";
 import type { AiReflectRequest } from "@/src/domain/types";
 import { formatMoney } from "@/src/domain/money";
@@ -71,17 +72,13 @@ export function AdvisorConsentModal({
       </div>
 
       <div className="modal-actions">
-        <button className="button button-ghost" type="button" onClick={onClose}>
+        <Button variant="ghost" type="button" onClick={onClose}>
           返回检查
-        </button>
-        <button
-          className="button button-primary"
-          type="button"
-          onClick={onConfirm}
-        >
+        </Button>
+        <Button type="button" onClick={onConfirm}>
           <Send size={17} aria-hidden="true" />
           确认发送
-        </button>
+        </Button>
       </div>
     </Modal>
   );

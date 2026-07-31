@@ -64,18 +64,13 @@ function statusView(record: PurchaseRecord, nowMs: number) {
 export function RecordCard({
   record,
   nowMs,
-  featured = false,
 }: {
   record: PurchaseRecord;
   nowMs: number;
-  featured?: boolean;
 }) {
   const status = statusView(record, nowMs);
   return (
-    <Link
-      className={`record-card${featured ? " record-card-featured" : ""}`}
-      href={`/items/${record.id}`}
-    >
+    <Link className="record-card" href={`/items/${record.id}`}>
       <div className="record-card-topline">
         <span className={`status-pill ${status.className}`}>
           {status.icon}
@@ -115,12 +110,7 @@ function ProductSketch({ title }: { title: string }) {
 
   return (
     <span className="record-card-visual" aria-hidden="true">
-      <Icon size={featuredIconSize(title)} strokeWidth={1.15} />
-      <i />
+      <Icon size={22} strokeWidth={1.7} />
     </span>
   );
-}
-
-function featuredIconSize(title: string): number {
-  return title.length > 12 ? 76 : 88;
 }

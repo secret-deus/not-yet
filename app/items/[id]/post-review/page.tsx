@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Button } from "@/src/components/ui/button";
 import { NotFoundState } from "@/src/components/NotFoundState";
 import { PageHeader } from "@/src/components/PageHeader";
 import { PostPurchaseReviewForm } from "@/src/components/PostPurchaseReviewForm";
@@ -22,9 +23,9 @@ export default function PostPurchaseReviewPage() {
       <section className="state-card">
         <h1>这条记录现在不需要填写使用感受</h1>
         <p>只有已购买、且尚未完成验证的记录会来到这里。</p>
-        <Link className="button button-primary" href={`/items/${id}`}>
-          返回详情
-        </Link>
+        <Button asChild>
+          <Link href={`/items/${id}`}>返回详情</Link>
+        </Button>
       </section>
     );
   }

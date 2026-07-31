@@ -86,7 +86,7 @@ test("starter preview is removed and production metadata is present", async () =
   assert.match(layout, /lang="zh-CN"/);
   assert.match(layout, /给购买决定一点时间/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(css, /--primary:\s*#205b4d/i);
+  assert.match(css, /--primary:\s*#174f43/i);
   await assert.rejects(
     access(new URL("public/_sites-preview", templateRoot)),
   );

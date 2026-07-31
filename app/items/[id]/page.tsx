@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/src/components/ui/button";
 import { AdvisorPanel } from "@/src/components/AdvisorPanel";
 import { Modal } from "@/src/components/Modal";
 import { NotFoundState } from "@/src/components/NotFoundState";
@@ -31,10 +32,12 @@ export default function ItemDetailPage() {
         title={record.title}
         description="这里保存的是你当时写下的内容和之后的真实决定。"
         action={
-          <Link className="button button-secondary" href={`/items/${id}/edit`}>
-            <Pencil size={17} aria-hidden="true" />
-            编辑
-          </Link>
+          <Button asChild variant="outline">
+            <Link href={`/items/${id}/edit`}>
+              <Pencil size={17} aria-hidden="true" />
+              编辑
+            </Link>
+          </Button>
         }
       />
 
@@ -49,14 +52,14 @@ export default function ItemDetailPage() {
           <h2>不再保留这条记录</h2>
           <p>删除后有 8 秒可以撤销；时间结束后会从本机最终清理。</p>
         </div>
-        <button
-          className="button button-danger-quiet"
+        <Button
+          variant="destructive"
           type="button"
           onClick={() => setDeleteOpen(true)}
         >
           <Trash2 size={17} aria-hidden="true" />
           删除
-        </button>
+        </Button>
       </section>
 
       <Modal
@@ -67,15 +70,15 @@ export default function ItemDetailPage() {
         onClose={() => setDeleteOpen(false)}
       >
         <div className="modal-actions">
-          <button
-            className="button button-ghost"
+          <Button
+            variant="ghost"
             type="button"
             onClick={() => setDeleteOpen(false)}
           >
             取消
-          </button>
-          <button
-            className="button button-danger"
+          </Button>
+          <Button
+            variant="destructive"
             type="button"
             onClick={() => {
               if (deleteItem(id)) {
@@ -85,7 +88,7 @@ export default function ItemDetailPage() {
             }}
           >
             确认删除
-          </button>
+          </Button>
         </div>
       </Modal>
     </div>

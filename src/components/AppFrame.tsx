@@ -8,6 +8,8 @@ import {
   useRef,
   type ReactNode,
 } from "react";
+import { Badge } from "@/src/components/ui/badge";
+import { Button } from "@/src/components/ui/button";
 import { useApp } from "@/src/context/AppProvider";
 
 export function AppFrame({ children }: { children: ReactNode }) {
@@ -42,10 +44,10 @@ export function AppFrame({ children }: { children: ReactNode }) {
             <small>Not Yet</small>
           </span>
         </Link>
-        <span className="local-badge">
+        <Badge className="local-badge" variant="outline">
           <LockKeyhole size={15} aria-hidden="true" />
           数据只存在本机
-        </span>
+        </Badge>
       </header>
 
       <div className="banner-stack" aria-live="polite">
@@ -62,14 +64,15 @@ export function AppFrame({ children }: { children: ReactNode }) {
         {saveError ? (
           <div className="banner banner-error" role="alert">
             <span>{saveError}</span>
-            <button
-              className="icon-button"
+            <Button
+              size="icon-sm"
+              variant="ghost"
               type="button"
               onClick={clearSaveError}
               aria-label="关闭保存错误提示"
             >
               <X size={18} />
-            </button>
+            </Button>
           </div>
         ) : null}
       </div>
@@ -92,9 +95,9 @@ export function AppFrame({ children }: { children: ReactNode }) {
               还可撤销 {(noticeRemainingMs / 1_000).toFixed(1)} 秒
             </span>
           </div>
-          <button type="button" onClick={undoLatestNotice}>
+          <Button size="sm" variant="outline" type="button" onClick={undoLatestNotice}>
             撤销
-          </button>
+          </Button>
         </div>
       ) : null}
     </div>
@@ -125,9 +128,9 @@ function RecoveryState({
       <p>
         应用没有覆盖原始内容。若你确认不再需要这些本地数据，可以重置后重新开始。
       </p>
-      <button className="button button-danger" type="button" onClick={onReset}>
+      <Button variant="destructive" type="button" onClick={onReset}>
         重置本地数据
-      </button>
+      </Button>
     </section>
   );
 }

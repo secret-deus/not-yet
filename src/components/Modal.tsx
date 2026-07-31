@@ -1,12 +1,13 @@
 "use client";
 
-import { X } from "lucide-react";
+import type { ReactNode } from "react";
 import {
-  useEffect,
-  useId,
-  useRef,
-  type ReactNode,
-} from "react";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/src/components/ui/dialog";
 
 export function Modal({
   open,
@@ -23,46 +24,24 @@ export function Modal({
   onClose(): void;
   tone?: "default" | "danger";
 }) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const titleId = useId();
-  const descriptionId = useId();
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
-
   return (
-    <dialog
-      ref={dialogRef}
-      className={`modal ${tone === "danger" ? "modal-danger" : ""}`}
-      onCancel={(event) => {
-        event.preventDefault();
-        onClose();
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!nextOpen) onClose();
       }}
-      onClose={onClose}
-      aria-labelledby={titleId}
-      aria-describedby={description ? descriptionId : undefined}
     >
-      <div className="modal-head">
-        <div>
-          <h2 id={titleId}>{title}</h2>
+      <DialogContent
+        className={`app-modal ${tone === "danger" ? "app-modal-danger" : ""}`}
+      >
+        <DialogHeader className="app-modal-head">
+          <DialogTitle>{title}</DialogTitle>
           {description ? (
-            <p id={descriptionId}>{description}</p>
+            <DialogDescription>{description}</DialogDescription>
           ) : null}
-        </div>
-        <button
-          className="icon-button"
-          type="button"
-          onClick={onClose}
-          aria-label="关闭"
-        >
-          <X size={20} />
-        </button>
-      </div>
-      {children}
-    </dialog>
+        </DialogHeader>
+        {children}
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,30 +1,57 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--surface);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--primary);
+  --color-primary-foreground: #fffdf8;
+  --color-secondary: var(--surface-green);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--surface-soft);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--terracotta-soft);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: var(--danger);
+  --color-border: var(--line);
+  --color-input: var(--line-strong);
+  --color-ring: var(--focus);
+}
 
 :root {
-  --canvas: #f5f2e9;
-  --surface: #fffdf8;
-  --surface-soft: #f0eee4;
-  --surface-green: #edf3ef;
-  --ink: #18362f;
-  --text: #273e38;
-  --muted: #687872;
-  --faint: #8b9893;
-  --line: #d9d8cf;
-  --line-strong: #bfc8c3;
-  --primary: #205b4d;
-  --primary-hover: #18493e;
-  --primary-soft: #dce9e3;
-  --terracotta: #ad5f42;
-  --terracotta-soft: #f2e2d9;
-  --warning: #805c22;
-  --warning-soft: #f4ead2;
-  --danger: #9f423c;
-  --danger-soft: #f6e5e2;
-  --focus: #d3764f;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
-  --max-content: 720px;
+  --canvas: #f3f0e7;
+  --surface: #fffefa;
+  --surface-soft: #ebe9e1;
+  --surface-green: #e5eee9;
+  --ink: #173a32;
+  --text: #30433d;
+  --muted: #68766f;
+  --faint: #8e9994;
+  --line: #d7d5cb;
+  --line-strong: #bdc4be;
+  --primary: #174f43;
+  --primary-hover: #103f35;
+  --primary-soft: #dbe8e2;
+  --terracotta: #a65a3f;
+  --terracotta-soft: #f1dfd6;
+  --warning: #79571f;
+  --warning-soft: #f3e7ce;
+  --danger: #97423b;
+  --danger-soft: #f4e2df;
+  --focus: #c86743;
+  --radius: 0.5rem;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --max-content: 780px;
   --font-sans:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;

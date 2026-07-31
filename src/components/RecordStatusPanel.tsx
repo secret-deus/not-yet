@@ -8,6 +8,9 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import { Label } from "@/src/components/ui/label";
 import { useApp } from "@/src/context/AppProvider";
 import {
   formatDateTime,
@@ -20,7 +23,7 @@ export function RecordStatusPanel({ record }: { record: PurchaseRecord }) {
   const { adjustItemCooling, beginReview } = useApp();
   const [nowMs, setNowMs] = useState(() => Date.now());
   const [adjustOpen, setAdjustOpen] = useState(false);
-  const [days, setDays] = useState(3);
+  const [days, setDays] = useState("3");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -59,8 +62,8 @@ export function RecordStatusPanel({ record }: { record: PurchaseRecord }) {
           <span style={{ width: `${progress}%` }} />
         </div>
         <div className="status-panel-actions">
-          <button
-            className="button button-secondary"
+          <Button
+            variant="outline"
             type="button"
             onClick={() => {
               if (beginReview(record.id)) {
@@ -69,14 +72,14 @@ export function RecordStatusPanel({ record }: { record: PurchaseRecord }) {
             }}
           >
             提前开始复盘
-          </button>
-          <button
-            className="button button-ghost"
+          </Button>
+          <Button
+            variant="ghost"
             type="button"
             onClick={() => setAdjustOpen(true)}
           >
             调整等待时间
-          </button>
+          </Button>
         </div>
 
         <Modal
@@ -86,15 +89,16 @@ export function RecordStatusPanel({ record }: { record: PurchaseRecord }) {
           onClose={() => setAdjustOpen(false)}
         >
           <div className="field">
-            <label htmlFor="adjust-days">继续等待几天</label>
-            <input
+            <Label htmlFor="adjust-days">继续等待几天</Label>
+            <Input
               id="adjust-days"
               type="number"
               min={1}
               max={30}
               step={1}
+              required
               value={days}
-              onChange={(event) => setDays(Number(event.target.value))}
+              onChange={(event) => setDays(event.target.value)}
             />
             <span className="field-hint">1～30 天</span>
           </div>
@@ -104,20 +108,28 @@ export function RecordStatusPanel({ record }: { record: PurchaseRecord }) {
             </p>
           ) : null}
           <div className="modal-actions">
-            <button
-              className="button button-ghost"
+            <Button
+              variant="ghost"
               type="button"
               onClick={() => setAdjustOpen(false)}
             >
               取消
-            </button>
-            <button
-              className="button button-primary"
+            </Button>
+            <Button
               type="button"
               onClick={() => {
                 setError(null);
+                const parsedDays = Number(days);
+                if (
+                  !Number.isInteger(parsedDays) ||
+                  parsedDays < 1 ||
+                  parsedDays > 30
+                ) {
+                  setError("请输入 1～30 天的整数。");
+                  return;
+                }
                 try {
-                  if (adjustItemCooling(record.id, days)) {
+                  if (adjustItemCooling(record.id, parsedDays)) {
                     setAdjustOpen(false);
                   }
                 } catch (adjustError) {
@@ -131,7 +143,7 @@ export function RecordStatusPanel({ record }: { record: PurchaseRecord }) {
             >
               <RotateCcw size={17} aria-hidden="true" />
               开始新一轮
-            </button>
+            </Button>
           </div>
         </Modal>
       </section>
@@ -151,12 +163,9 @@ export function RecordStatusPanel({ record }: { record: PurchaseRecord }) {
             <p>先对照当时的理由，再决定继续等、先不买，还是已经买了。</p>
           </div>
         </div>
-        <Link
-          className="button button-primary button-block"
-          href={`/items/${record.id}/review`}
-        >
-          开始复盘
-        </Link>
+        <Button asChild className="button-block">
+          <Link href={`/items/${record.id}/review`}>开始复盘</Link>
+        </Button>
       </section>
     );
   }
@@ -183,12 +192,15 @@ export function RecordStatusPanel({ record }: { record: PurchaseRecord }) {
           </div>
         </div>
         {review?.status !== "completed" ? (
-          <Link
-            className={`button ${due ? "button-primary" : "button-secondary"} button-block`}
-            href={`/items/${record.id}/post-review`}
+          <Button
+            asChild
+            className="button-block"
+            variant={due ? "default" : "outline"}
           >
-            {due ? "记录 7 天使用感受" : "提前记录使用感受"}
-          </Link>
+            <Link href={`/items/${record.id}/post-review`}>
+              {due ? "记录 7 天使用感受" : "提前记录使用感受"}
+            </Link>
+          </Button>
         ) : null}
       </section>
     );

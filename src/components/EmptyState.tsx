@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Plus, Sprout } from "lucide-react";
+import { Button } from "@/src/components/ui/button";
 
 export function EmptyState({ filter }: { filter: string }) {
   const copy =
@@ -25,10 +26,12 @@ export function EmptyState({ filter }: { filter: string }) {
       <h2>{copy.title}</h2>
       <p>{copy.body}</p>
       {filter === "waiting" ? (
-        <Link className="button button-primary" href="/items/new">
-          <Plus size={18} aria-hidden="true" />
-          记下想买的东西
-        </Link>
+        <Button asChild>
+          <Link href="/items/new">
+            <Plus size={18} aria-hidden="true" />
+            记下想买的东西
+          </Link>
+        </Button>
       ) : null}
     </section>
   );

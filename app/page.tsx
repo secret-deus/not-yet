@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Plus, ShieldCheck } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/src/components/ui/button";
 import { CoolingDial } from "@/src/components/CoolingDial";
 import { EmptyState } from "@/src/components/EmptyState";
 import { RecordCard } from "@/src/components/RecordCard";
@@ -52,11 +53,17 @@ export default function Home() {
           <p>
             记下此刻的理由，等冷静期结束再回来看看。买或不买，都由你决定。
           </p>
-          <Link className="button button-primary home-cta" href="/items/new">
-            <Plus size={19} aria-hidden="true" />
-            记下想买的东西
-            <ArrowRight className="button-arrow" size={18} aria-hidden="true" />
-          </Link>
+          <Button asChild className="home-cta" size="lg">
+            <Link href="/items/new">
+              <Plus size={19} aria-hidden="true" />
+              记下想买的东西
+              <ArrowRight
+                className="button-arrow"
+                size={18}
+                aria-hidden="true"
+              />
+            </Link>
+          </Button>
           <div className="privacy-note">
             <ShieldCheck size={17} aria-hidden="true" />
             <span>
@@ -92,13 +99,8 @@ export default function Home() {
         >
           {visible.length ? (
             <div className="record-list">
-              {visible.map((record, index) => (
-                <RecordCard
-                  featured={index === 0 && visible.length > 1}
-                  key={record.id}
-                  record={record}
-                  nowMs={nowMs}
-                />
+              {visible.map((record) => (
+                <RecordCard key={record.id} record={record} nowMs={nowMs} />
               ))}
               <ReflectionPause />
             </div>

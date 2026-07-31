@@ -7,6 +7,10 @@ import {
   useState,
   type FormEvent,
 } from "react";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import { Label } from "@/src/components/ui/label";
+import { Textarea } from "@/src/components/ui/textarea";
 import { minorToYuan } from "@/src/domain/money";
 import type { PurchaseRecord, RecordDraft } from "@/src/domain/types";
 
@@ -115,10 +119,10 @@ export function RecordForm({
 
       <section className="form-section">
         <div className="field">
-          <label htmlFor="title">
+          <Label htmlFor="title">
             想买什么 <span aria-hidden="true">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             id="title"
             autoFocus
             required
@@ -132,10 +136,10 @@ export function RecordForm({
 
         <div className="field-grid">
           <div className="field">
-            <label htmlFor="price">大概多少钱</label>
+            <Label htmlFor="price">大概多少钱</Label>
             <div className="input-prefix">
               <span>¥</span>
-              <input
+              <Input
                 id="price"
                 inputMode="decimal"
                 value={draft.priceYuan}
@@ -151,7 +155,7 @@ export function RecordForm({
 
           {!record ? (
             <div className="field">
-              <label htmlFor="cooling">先等多久</label>
+              <Label htmlFor="cooling">先等多久</Label>
               <select
                 id="cooling"
                 value={draft.coolingPreset}
@@ -173,8 +177,8 @@ export function RecordForm({
 
         {!record && draft.coolingPreset === "custom" ? (
           <div className="field">
-            <label htmlFor="custom-days">自定义天数</label>
-            <input
+            <Label htmlFor="custom-days">自定义天数</Label>
+            <Input
               id="custom-days"
               type="number"
               min={1}
@@ -193,8 +197,8 @@ export function RecordForm({
         ) : null}
 
         <div className="field">
-          <label htmlFor="reason">为什么现在想买</label>
-          <textarea
+          <Label htmlFor="reason">为什么现在想买</Label>
+          <Textarea
             id="reason"
             maxLength={500}
             rows={4}
@@ -206,8 +210,9 @@ export function RecordForm({
         </div>
       </section>
 
-      <button
+      <Button
         className="disclosure-button"
+        variant="ghost"
         type="button"
         aria-expanded={detailsOpen}
         aria-controls="more-fields"
@@ -222,13 +227,13 @@ export function RecordForm({
           className={detailsOpen ? "is-open" : ""}
           aria-hidden="true"
         />
-      </button>
+      </Button>
 
       {detailsOpen ? (
         <section className="form-section" id="more-fields">
           <div className="field">
-            <label htmlFor="intended-use">打算怎么用</label>
-            <textarea
+            <Label htmlFor="intended-use">打算怎么用</Label>
+            <Textarea
               id="intended-use"
               maxLength={300}
               rows={3}
@@ -240,8 +245,8 @@ export function RecordForm({
 
           <div className="field-grid">
             <div className="field">
-              <label htmlFor="expected-uses">每周预计用几次</label>
-              <input
+              <Label htmlFor="expected-uses">每周预计用几次</Label>
+              <Input
                 id="expected-uses"
                 type="number"
                 inputMode="numeric"
@@ -256,7 +261,7 @@ export function RecordForm({
               />
             </div>
             <div className="field">
-              <label htmlFor="desire-level">现在有多想要</label>
+              <Label htmlFor="desire-level">现在有多想要</Label>
               <select
                 id="desire-level"
                 value={draft.desireLevel ?? ""}
@@ -280,8 +285,8 @@ export function RecordForm({
           </div>
 
           <div className="field">
-            <label htmlFor="alternative">手上已有的替代方案</label>
-            <textarea
+            <Label htmlFor="alternative">手上已有的替代方案</Label>
+            <Textarea
               id="alternative"
               maxLength={300}
               rows={3}
@@ -294,8 +299,8 @@ export function RecordForm({
           </div>
 
           <div className="field">
-            <label htmlFor="product-url">商品链接</label>
-            <input
+            <Label htmlFor="product-url">商品链接</Label>
+            <Input
               id="product-url"
               type="url"
               maxLength={2_000}
@@ -311,13 +316,13 @@ export function RecordForm({
       ) : null}
 
       <div className="form-actions sticky-actions">
-        <button className="button button-ghost" type="button" onClick={cancel}>
+        <Button variant="ghost" type="button" onClick={cancel}>
           取消
-        </button>
-        <button className="button button-primary" type="submit">
+        </Button>
+        <Button type="submit">
           <Save size={18} aria-hidden="true" />
           {submitLabel}
-        </button>
+        </Button>
       </div>
     </form>
   );

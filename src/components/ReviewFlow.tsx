@@ -5,20 +5,27 @@ import {
   PauseCircle,
   ShoppingBag,
 } from "lucide-react";
-import { useState, type FormEvent, type KeyboardEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import { Label } from "@/src/components/ui/label";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/src/components/ui/radio-group";
+import { Textarea } from "@/src/components/ui/textarea";
 import { useApp } from "@/src/context/AppProvider";
 import { formatMoney } from "@/src/domain/money";
 import { localDateTimeInputValue } from "@/src/domain/time";
 import type { PurchaseRecord } from "@/src/domain/types";
 
 type Choice = "wait" | "skip" | "purchase" | null;
-const choiceOrder = ["wait", "skip", "purchase"] as const;
 
 export function ReviewFlow({ record }: { record: PurchaseRecord }) {
   const { continueWaiting, skipItem, purchaseItem } = useApp();
   const [choice, setChoice] = useState<Choice>(null);
   const [error, setError] = useState<string | null>(null);
-  const [waitDays, setWaitDays] = useState(3);
+  const [waitDays, setWaitDays] = useState("3");
   const [waitReason, setWaitReason] = useState("");
   const [skipReason, setSkipReason] = useState("");
   const [actualPrice, setActualPrice] = useState(
@@ -44,8 +51,13 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     if (choice === "wait") {
+      const parsedDays = Number(waitDays);
+      if (!Number.isInteger(parsedDays) || parsedDays < 1 || parsedDays > 30) {
+        setError("请输入 1～30 天的整数。");
+        return;
+      }
       finish(() =>
-        continueWaiting(record.id, waitDays, waitReason || undefined),
+        continueWaiting(record.id, parsedDays, waitReason || undefined),
       );
     } else if (choice === "skip") {
       finish(() => skipItem(record.id, skipReason || undefined));
@@ -63,31 +75,6 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
   const choose = (next: Exclude<Choice, null>) => {
     setChoice(next);
     setError(null);
-  };
-
-  const handleChoiceKeyDown = (
-    event: KeyboardEvent<HTMLButtonElement>,
-    current: Exclude<Choice, null>,
-  ) => {
-    const currentIndex = choiceOrder.indexOf(current);
-    let nextIndex = currentIndex;
-    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-      nextIndex = (currentIndex + 1) % choiceOrder.length;
-    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-      nextIndex = (currentIndex - 1 + choiceOrder.length) % choiceOrder.length;
-    } else if (event.key === "Home") {
-      nextIndex = 0;
-    } else if (event.key === "End") {
-      nextIndex = choiceOrder.length - 1;
-    } else {
-      return;
-    }
-    event.preventDefault();
-    const next = choiceOrder[nextIndex];
-    choose(next);
-    window.requestAnimationFrame(() => {
-      document.getElementById(`decision-${next}`)?.focus();
-    });
   };
 
   return (
@@ -119,42 +106,31 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
         <h2 id="decision-title">等了一段时间，现在更接近哪一个决定？</h2>
         <p>没有“正确答案”。选择此刻最真实的一项就好。</p>
 
-        <div
+        <RadioGroup
           className="decision-options"
-          role="radiogroup"
+          value={choice ?? ""}
+          onValueChange={(value) => choose(value as Exclude<Choice, null>)}
           aria-labelledby="decision-title"
         >
           <DecisionOption
-            active={choice === "wait"}
             choice="wait"
             icon={<Clock3 size={22} />}
             title="我想再等一等"
             description="再给自己一轮冷静期"
-            onClick={() => choose("wait")}
-            onKeyDown={handleChoiceKeyDown}
-            tabIndex={choice === null || choice === "wait" ? 0 : -1}
           />
           <DecisionOption
-            active={choice === "skip"}
             choice="skip"
             icon={<PauseCircle size={22} />}
             title="我先不买"
             description="把这次决定记录下来"
-            onClick={() => choose("skip")}
-            onKeyDown={handleChoiceKeyDown}
-            tabIndex={choice === "skip" ? 0 : -1}
           />
           <DecisionOption
-            active={choice === "purchase"}
             choice="purchase"
             icon={<ShoppingBag size={22} />}
             title="我已经买了"
             description="一周后回来验证使用感受"
-            onClick={() => choose("purchase")}
-            onKeyDown={handleChoiceKeyDown}
-            tabIndex={choice === "purchase" ? 0 : -1}
           />
-        </div>
+        </RadioGroup>
       </section>
 
       {choice ? (
@@ -162,21 +138,22 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
           {choice === "wait" ? (
             <>
               <div className="field">
-                <label htmlFor="wait-days">再等几天</label>
-                <input
+                <Label htmlFor="wait-days">再等几天</Label>
+                <Input
                   id="wait-days"
                   type="number"
                   min={1}
                   max={30}
                   step={1}
+                  required
                   value={waitDays}
-                  onChange={(event) => setWaitDays(Number(event.target.value))}
+                  onChange={(event) => setWaitDays(event.target.value)}
                 />
                 <span className="field-hint">1～30 天，新一轮从现在开始</span>
               </div>
               <div className="field">
-                <label htmlFor="wait-reason">为什么想再等等（可选）</label>
-                <textarea
+                <Label htmlFor="wait-reason">为什么想再等等（可选）</Label>
+                <Textarea
                   id="wait-reason"
                   rows={3}
                   maxLength={500}
@@ -190,8 +167,8 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
 
           {choice === "skip" ? (
             <div className="field">
-              <label htmlFor="skip-reason">现在不买的主要原因（可选）</label>
-              <textarea
+              <Label htmlFor="skip-reason">现在不买的主要原因（可选）</Label>
+              <Textarea
                 id="skip-reason"
                 rows={4}
                 maxLength={500}
@@ -206,10 +183,10 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
             <>
               <div className="field-grid">
                 <div className="field">
-                  <label htmlFor="actual-price">实际花了多少钱</label>
+                  <Label htmlFor="actual-price">实际花了多少钱</Label>
                   <div className="input-prefix">
                     <span>¥</span>
-                    <input
+                    <Input
                       id="actual-price"
                       inputMode="decimal"
                       value={actualPrice}
@@ -219,8 +196,8 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
                   </div>
                 </div>
                 <div className="field">
-                  <label htmlFor="purchased-at">购买时间</label>
-                  <input
+                  <Label htmlFor="purchased-at">购买时间</Label>
+                  <Input
                     id="purchased-at"
                     type="datetime-local"
                     value={purchasedAt}
@@ -229,8 +206,8 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
                 </div>
               </div>
               <div className="field">
-                <label htmlFor="purchase-reason">最后决定买的主要原因（可选）</label>
-                <textarea
+                <Label htmlFor="purchase-reason">最后决定买的主要原因（可选）</Label>
+                <Textarea
                   id="purchase-reason"
                   rows={3}
                   maxLength={500}
@@ -248,16 +225,16 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
           ) : null}
 
           <div className="form-actions sticky-actions">
-            <button
-              className="button button-ghost"
+            <Button
+              variant="ghost"
               type="button"
               onClick={() => setChoice(null)}
             >
               重新选择
-            </button>
-            <button className="button button-primary" type="submit">
+            </Button>
+            <Button type="submit">
               确认这个决定
-            </button>
+            </Button>
           </div>
         </form>
       ) : null}
@@ -266,43 +243,28 @@ export function ReviewFlow({ record }: { record: PurchaseRecord }) {
 }
 
 function DecisionOption({
-  active,
   choice,
   icon,
   title,
   description,
-  onClick,
-  onKeyDown,
-  tabIndex,
 }: {
-  active: boolean;
   choice: Exclude<Choice, null>;
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
-  onClick(): void;
-  onKeyDown(
-    event: KeyboardEvent<HTMLButtonElement>,
-    choice: Exclude<Choice, null>,
-  ): void;
-  tabIndex: number;
 }) {
   return (
-    <button
-      className={active ? "is-active" : ""}
-      id={`decision-${choice}`}
-      type="button"
-      role="radio"
-      aria-checked={active}
-      onClick={onClick}
-      onKeyDown={(event) => onKeyDown(event, choice)}
-      tabIndex={tabIndex}
-    >
-      <span aria-hidden="true">{icon}</span>
-      <div>
-        <strong>{title}</strong>
-        <small>{description}</small>
-      </div>
-    </button>
+    <div className="decision-option">
+      <RadioGroupItem id={`decision-${choice}`} value={choice} />
+      <Label htmlFor={`decision-${choice}`}>
+        <span className="decision-option-icon" aria-hidden="true">
+          {icon}
+        </span>
+        <span>
+          <strong>{title}</strong>
+          <small>{description}</small>
+        </span>
+      </Label>
+    </div>
   );
 }

@@ -51,14 +51,7 @@ export function CoolingDial({
           ? `${recordTitle}，${accessibleTime}`
           : "给购买决定留一点时间"}
       </span>
-      <div className="paper-bag" aria-hidden="true">
-        <span className="bag-handle" />
-        <span className="paper-tab paper-tab-one">再想想</span>
-        <span className="paper-tab paper-tab-two">复盘</span>
-        <span className="paper-tab paper-tab-three">决定</span>
-      </div>
       <div className="cooling-dial" aria-hidden="true">
-        <span className="dial-pointer" />
         <div className="dial-face">
           <span className="dial-kicker">{parts.length ? "还有" : "先等等"}</span>
           {parts.length ? (
@@ -78,6 +71,9 @@ export function CoolingDial({
           </span>
         </div>
       </div>
+      <span className="cooling-caption" aria-hidden="true">
+        冷静期 · 不催促
+      </span>
     </div>
   );
 }
