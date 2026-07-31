@@ -2,7 +2,7 @@
 
 一个“小而美”的购物冷静器：先记下想买的东西和此刻的理由，等冷静期结束后再复盘；如果最终购买，还能在使用一段时间后对照预期和实际。
 
-- 在线体验：发布后补充
+- 在线体验：[not-yet-coldcart.democlaw123.chatgpt.site](https://not-yet-coldcart.democlaw123.chatgpt.site)
 - GitHub 源码：[github.com/secret-deus/not-yet](https://github.com/secret-deus/not-yet)
 - 产品需求：[docs/PRD.md](docs/PRD.md)
 
