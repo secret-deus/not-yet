@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     locale: "zh_CN",
     images: [
       {
-        url: "/og-paper-pause.png",
-        width: 1730,
-        height: 909,
+        url: "/og-paper-pause.jpg",
+        width: 1200,
+        height: 630,
         alt: "再等等：给购买决定一点时间",
       },
     ],
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "再等等 · 给购买决定一点时间",
     description:
       "记下想买的东西，等一等，再用真实感受做决定。数据默认只保存在你的浏览器。",
-    images: ["/og-paper-pause.png"],
+    images: ["/og-paper-pause.jpg"],
   },
 };
 
